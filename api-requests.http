@@ -1,0 +1,135 @@
+### Drop Me Recycling API - Sample Requests
+### Use with VS Code REST Client extension or similar
+
+@baseUrl = http://localhost:3000/api
+
+### ============================================
+### HEALTH CHECK
+### ============================================
+
+### Check API Health
+GET {{baseUrl}}/health
+
+### ============================================
+### USER ENDPOINTS
+### ============================================
+
+### Register a new user
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "phoneNumber": "+201234567890",
+  "name": "Ahmed Hassan"
+}
+
+### Register another user
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "phoneNumber": "+201098765432",
+  "name": "Sara Mohamed"
+}
+
+### Identify user by phone number
+POST {{baseUrl}}/users/identify
+Content-Type: application/json
+
+{
+  "phoneNumber": "+201234567890"
+}
+
+### Get user by ID (replace with actual UUID)
+GET {{baseUrl}}/users/{{userId}}
+
+### Get leaderboard
+GET {{baseUrl}}/users/leaderboard?limit=10
+
+### ============================================
+### TRANSACTION ENDPOINTS
+### ============================================
+
+### Get points configuration
+GET {{baseUrl}}/transactions/points-config
+
+### Create recycling transaction - Plastic Bottle
+POST {{baseUrl}}/transactions/recycle
+Content-Type: application/json
+
+{
+  "userId": "REPLACE_WITH_USER_ID",
+  "itemType": "plastic_bottle",
+  "itemBarcode": "5901234123457",
+  "machineId": "MACHINE-CAIRO-001"
+}
+
+### Create recycling transaction - Aluminum Can
+POST {{baseUrl}}/transactions/recycle
+Content-Type: application/json
+
+{
+  "userId": "REPLACE_WITH_USER_ID",
+  "itemType": "aluminum_can",
+  "itemBarcode": "5901234123458",
+  "machineId": "MACHINE-CAIRO-001"
+}
+
+### Create recycling transaction - Glass Bottle
+POST {{baseUrl}}/transactions/recycle
+Content-Type: application/json
+
+{
+  "userId": "REPLACE_WITH_USER_ID",
+  "itemType": "glass_bottle",
+  "itemBarcode": "5901234123459",
+  "machineId": "MACHINE-ALEX-002"
+}
+
+### Get user transactions
+GET {{baseUrl}}/transactions/user/REPLACE_WITH_USER_ID?limit=20&offset=0
+
+### Get transaction by ID
+GET {{baseUrl}}/transactions/REPLACE_WITH_TRANSACTION_ID
+
+### ============================================
+### ERROR SCENARIOS (for testing validation)
+### ============================================
+
+### Invalid phone number format
+POST {{baseUrl}}/users/register
+Content-Type: application/json
+
+{
+  "phoneNumber": "invalid",
+  "name": "Test User"
+}
+
+### Missing required fields
+POST {{baseUrl}}/transactions/recycle
+Content-Type: application/json
+
+{
+  "userId": "some-id"
+}
+
+### Invalid item type
+POST {{baseUrl}}/transactions/recycle
+Content-Type: application/json
+
+{
+  "userId": "REPLACE_WITH_USER_ID",
+  "itemType": "paper",
+  "machineId": "MACHINE-001"
+}
+
+### Duplicate barcode scan (run twice with same barcode)
+POST {{baseUrl}}/transactions/recycle
+Content-Type: application/json
+
+{
+  "userId": "REPLACE_WITH_USER_ID",
+  "itemType": "plastic_bottle",
+  "itemBarcode": "DUPLICATE-TEST-001",
+  "machineId": "MACHINE-001"
+}
