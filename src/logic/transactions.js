@@ -1,13 +1,13 @@
-const db = require('../database');
-const uuid = require('uuid');
-const users = require('./users');
-const expressValidator = require('express-validator');
+import db from '../database/index.js';
+import { v4 as uuid } from 'uuid';
+import users from './users.js';
+import expressValidator from 'express-validator';
 
 const POINTS = { plastic_bottle: 10, aluminum_can: 15, glass_bottle: 20 };
 const MIN_SCAN_INTERVAL = 5;
 
 function createTransaction(userId, itemType, itemBarcode, machineId) {
-  const id = uuid.v4();
+  const id = uuid();
   const now = new Date().toISOString();
   
   let pointsEarned = 0;
@@ -154,9 +154,9 @@ function checkRapidScanning(req, res, next) {
   const lastTransaction = getLastTransactionByUser(userId);
   if (lastTransaction === null) { next(); return; }
   
-  const lastScanTime = new Date(lastTransaction.created_at + 'Z');
+  const lastScanTime = new Date(lastTransaction.created_at);
   const currentTime = new Date();
-  const timeDifferenceSeconds = (currentTime - lastScanTime) / 1000;
+  const timeDifferenceSeconds = (currentTime.getTime() - lastScanTime.getTime()) / 1000;
   
   if (timeDifferenceSeconds < MIN_SCAN_INTERVAL) {
     const waitTime = Math.ceil(MIN_SCAN_INTERVAL - timeDifferenceSeconds);
@@ -182,7 +182,7 @@ const paginationRules = [
   expressValidator.query('offset').optional().isInt({ min: 0 }).withMessage('Offset must be a non-negative integer')
 ];
 
-module.exports = {
+export default {
   createTransaction: createTransaction,
   findTransactionById: findTransactionById,
   findTransactionsByUserId: findTransactionsByUserId,

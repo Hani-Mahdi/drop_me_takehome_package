@@ -1,6 +1,6 @@
-const initSqlJs = require('sql.js');
-const path = require('path');
-const fs = require('fs');
+import initSqlJs from 'sql.js';
+import path from 'path';
+import fs from 'fs';
 
 let db = null;
 const databasePath = './data/dropme.db';
@@ -91,7 +91,7 @@ function run(sql, params) {
   saveDatabase();
 }
 
-module.exports = {
+export default {
   init: initDatabase,
   getOne: getOne,
   getAll: getAll,

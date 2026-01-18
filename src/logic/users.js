@@ -1,9 +1,9 @@
-const db = require('../database');
-const uuid = require('uuid');
-const expressValidator = require('express-validator');
+import db from '../database/index.js';
+import { v4 as uuid } from 'uuid';
+import expressValidator from 'express-validator';
 
 function createUser(phoneNumber, name) {
-  const id = uuid.v4();
+  const id = uuid();
   const now = new Date().toISOString();
   const sql = 'INSERT INTO users (id, phone_number, name, total_points, created_at, updated_at) VALUES (?, ?, ?, 0, ?, ?)';
   db.run(sql, [id, phoneNumber, name, now, now]);
@@ -151,7 +151,7 @@ const userIdRules = [
   expressValidator.param('userId').isUUID().withMessage('Invalid user ID format')
 ];
 
-module.exports = {
+export default {
   createUser: createUser,
   findUserById: findUserById,
   findUserByPhoneNumber: findUserByPhoneNumber,

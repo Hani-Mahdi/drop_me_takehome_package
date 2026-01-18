@@ -1,9 +1,9 @@
-const express = require('express');
-const cors = require('cors');
-const helmet = require('helmet');
-const rateLimit = require('express-rate-limit');
-const db = require('./database');
-const helpers = require('./logic/helpers');
+import express from 'express';
+import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import db from './database/index.js';
+import helpers from './logic/helpers.js';
 
 const app = express();
 
@@ -45,23 +45,23 @@ app.get('/api/health', function(req, res) {
   });
 });
 
-db.init().then(function() {
-  const userRoutes = require('./routes/userRoutes');
-  const transactionRoutes = require('./routes/transactionRoutes');
+db.init().then(async () => {
+  const userRoutes = await import('./routes/userRoutes.js');
+  const transactionRoutes = await import('./routes/transactionRoutes.js');
   
-  app.use('/api/users', userRoutes);
-  app.use('/api/transactions', transactionRoutes);
+  app.use('/api/users', userRoutes.default);
+  app.use('/api/transactions', transactionRoutes.default);
   app.use(helpers.notFoundHandler);
   app.use(helpers.errorHandler);
 
-  const PORT = 3000;
-  app.listen(PORT, function() {
+  const PORT = 8080;
+  app.listen(PORT, () => {
     console.log('Drop Me API server running on port ' + PORT);
     console.log('Health check: http://localhost:' + PORT + '/api/health');
   });
-}).catch(function(error) {
+}).catch(error => {
   console.log('Failed to initialize database:', error);
   process.exit(1);
 });
 
-module.exports = app;
+export default app;

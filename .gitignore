@@ -30,3 +30,8 @@ coverage/
 # Build
 dist/
 build/
+
+# Demo scripts
+demo.sh
+demo.ps1
+demo-commands.md

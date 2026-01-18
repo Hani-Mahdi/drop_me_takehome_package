@@ -1,4 +1,4 @@
-const expressValidator = require('express-validator');
+import expressValidator from 'express-validator';
 
 function validate(req, res, next) {
   const errors = expressValidator.validationResult(req);
@@ -28,4 +28,4 @@ function notFoundHandler(req, res, next) {
   res.status(404).json({ success: false, error: { code: 'NOT_FOUND', message: 'Route ' + req.originalUrl + ' not found' } });
 }
 
-module.exports = { validate: validate, errorHandler: errorHandler, notFoundHandler: notFoundHandler };
+export default { validate: validate, errorHandler: errorHandler, notFoundHandler: notFoundHandler };
